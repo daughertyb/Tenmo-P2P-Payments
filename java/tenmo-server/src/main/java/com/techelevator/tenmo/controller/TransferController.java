@@ -25,11 +25,10 @@ public class TransferController {
 	@RequestMapping(path="/get-balance", method=RequestMethod.GET)
 	public Balance getBalance(Principal principal) {
 		
-		System.out.println("The following Person is requesting a balance: " + principal.getName());
-		
 		int id = userDao.findIdByUsername(principal.getName());
 		Balance balance = transferDao.getBalance(id);
 		
 		return balance;
-	}
+		
 }
+	}
