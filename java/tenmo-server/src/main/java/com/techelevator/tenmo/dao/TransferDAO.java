@@ -6,4 +6,7 @@ public interface TransferDAO {
 	
 	public Balance getBalance(int userId);
 
+
+	public void sendFunds(int fromUser, int toUser, double amount);
+
 }

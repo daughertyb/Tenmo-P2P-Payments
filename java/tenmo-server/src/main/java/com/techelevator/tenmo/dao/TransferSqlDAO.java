@@ -32,5 +32,29 @@ public class TransferSqlDAO implements TransferDAO {
 		}
 		return userBalance;
 	}
+	
+	@Override
+	public void sendFunds(int fromUser, int toUser, double amount) {
+		
+		double senderCurrentBalance = this.getBalance(fromUser).getBalance();
+		double recepientCurrentBalance = this.getBalance(toUser).getBalance();
+		
+		double newSenderBalance = senderCurrentBalance - amount;
+		double newRecepientBalance = recepientCurrentBalance + amount;
+		
+		String sqlSubtract = "UPDATE accounts SET balance = ? WHERE account_id = ?";
+		String sqlAdd = "UPDATE accounts SET balance = ? WHERE account_id = ?";
+//		
+		jdbcTemplate.update(sqlSubtract, newSenderBalance, fromUser);
+		jdbcTemplate.update(sqlAdd, newRecepientBalance, toUser);
+	
+//		
+		System.out.println("Transfer complete");
+		//Add if else to check if enough funds are available and send success or failure message via if/else
+		
+	}
+	
+	
+	
 
 }

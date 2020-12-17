@@ -5,6 +5,8 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.TransferDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.Balance;
+import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 
 @RestController
@@ -20,7 +23,7 @@ public class TransferController {
 
 	@Autowired
 	TransferDAO transferDao;
-
+	
 	@Autowired
 	UserDAO userDao;
 
@@ -40,6 +43,15 @@ public class TransferController {
 		List<User> findAllUsers = userDao.findAll();
 		return findAllUsers;
 
+	}
+	
+	
+	@RequestMapping(path = "/send", method = RequestMethod.POST)
+	public void sendFunds(@RequestBody Transfer transfer) {
+		
+			transferDao.sendFunds(transfer.getFromUser(), transfer.getToUser(), transfer.getAmount());
+		
+		
 	}
 
 }
