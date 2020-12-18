@@ -81,14 +81,15 @@ public class TransferService {
 			transfer.setToUser(Integer.parseInt(scanner.nextLine()));
 			transfer.setFromUser(currentUser.getUser().getId());
 			if (transfer.getToUser() != 0) {
-				System.out.print("Enter amount: ");
+				System.out.print("Enter amount: ");				
 				try {
 					transfer.setAmount(Double.parseDouble(scanner.nextLine()));			
 				} catch (NumberFormatException e) {
 					System.out.println("Error when entering amount");
 				}
+				
 				String output = restTemplate.exchange(BASE_URL + "send", HttpMethod.POST, makeAuthEntityWithBody(transfer), String.class).getBody();
-						
+					
 			}
 		} catch (Exception e) {
 			System.out.println("Bad input.");

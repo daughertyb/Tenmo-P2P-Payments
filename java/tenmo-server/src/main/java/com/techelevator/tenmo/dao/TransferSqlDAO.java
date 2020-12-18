@@ -16,6 +16,21 @@ public class TransferSqlDAO implements TransferDAO {
 	public TransferSqlDAO(DataSource dataSource) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
+	
+	@Override
+	public double getBalanceDouble(int userId) {
+
+		String sql = "SELECT balance FROM accounts WHERE user_id = ?";
+
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId);
+
+		double resultDouble = 0.00;
+
+		if (results.next()) {
+			resultDouble = results.getDouble("balance");
+		}
+		return resultDouble;
+	}
 
 	@Override
 	public Balance getBalance(int userId) {
