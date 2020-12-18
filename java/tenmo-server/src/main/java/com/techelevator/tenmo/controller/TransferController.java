@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.techelevator.tenmo.dao.TransferDAO;
 import com.techelevator.tenmo.dao.UserDAO;
 import com.techelevator.tenmo.model.Balance;
+import com.techelevator.tenmo.model.InsufficientFundsException;
 import com.techelevator.tenmo.model.Transfer;
 import com.techelevator.tenmo.model.User;
 
@@ -47,19 +48,16 @@ public class TransferController {
 	}
 
 	@RequestMapping(path = "/transfers", method = RequestMethod.GET)
-	List<Transfer> getAllTransfersById(@RequestBody User user) {
-		
-		Long userId = user.getId();
-		int userIdNew = userId.intValue();
-		
-		List<Transfer> listAllTransfers = transferDao.getAllTransfersById(userIdNew);
+	List<Transfer> getAllTransfersById(@RequestBody Principal principal) {
+
+		int id = userDao.findIdByUsername(principal.getName());
+
+		List<Transfer> listAllTransfers = transferDao.getAllTransfersById(id);
 		return listAllTransfers;
 	}
 
 	@RequestMapping(path = "/send", method = RequestMethod.POST)
-	public Transfer sendFunds(@RequestBody Transfer transfer) {
-
-		Transfer returnStatus = new Transfer();
+	public void sendFunds(@RequestBody Transfer transfer) throws InsufficientFundsException {
 
 		int userId = transfer.getFromUser();
 		double balance = transferDao.getBalanceDouble(userId);
@@ -68,11 +66,10 @@ public class TransferController {
 
 			transferDao.sendFunds(transfer.getFromUser(), transfer.getToUser(), transfer.getAmount());
 		} else {
-			System.out.println("Insufficient Funds");
+			throw new InsufficientFundsException();
 
 		}
 
-		return returnStatus;
 	}
 
 }
