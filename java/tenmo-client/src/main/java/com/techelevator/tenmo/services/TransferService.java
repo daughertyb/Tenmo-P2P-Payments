@@ -60,6 +60,46 @@ public class TransferService {
 		return users;
 	}
 
+	public Transfer[] getAllTransfers() {
+		Transfer[] allTransfers = null;
+
+		try {
+			allTransfers = restTemplate
+					.exchange(BASE_URL + "transfers", HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
+			for (Transfer transfers : allTransfers) {
+//				System.out.println("-------------------------------------------\r\n" + "From User\r" + "To User\r"
+//						+ "ID           ID              Amount\r\n"
+//						+ "-------------------------------------------\r\n");
+//				System.out.println(
+//						transfers.getTransferId() + "\t\t" + transfers.getFromUser() + "\t\t" + transfers.getToUser() + "  \t\t$" + transfers.getAmount());
+				System.out.println(transfers.getTransferStatusId() + transfers.getTransferTypeId());
+			}
+			
+			
+//			System.out.println("To view a specific transaction, enter a Transfer Id :");
+//			Scanner scanner = new Scanner(System.in);
+//			int tranId = scanner.nextInt();
+//			
+//			if (transfers == tranId)
+//			
+//			for (Transfer transfers : allTransfers) {
+//				System.out.println(transfers.getTransferId());
+//				
+//			}
+//			
+//		
+		
+		}
+
+		catch (ResourceAccessException x) {
+			System.out.println("Error getting transfers.");
+		}
+		return allTransfers;
+
+	}
+	
+	
+
 	public void sendFunds(AuthenticatedUser currentUser) {
 		User[] users = null;
 		Transfer transfer = new Transfer();
@@ -110,6 +150,13 @@ public class TransferService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(AUTH_TOKEN);
 		HttpEntity entity = new HttpEntity<>(transfer, headers);
+		return entity;
+	}
+
+	private HttpEntity makeAuthEntityWithBodyP(Principal principal) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.setBearerAuth(AUTH_TOKEN);
+		HttpEntity entity = new HttpEntity<>(principal, headers);
 		return entity;
 	}
 

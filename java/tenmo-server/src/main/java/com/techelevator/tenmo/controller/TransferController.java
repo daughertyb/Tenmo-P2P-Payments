@@ -48,7 +48,7 @@ public class TransferController {
 	}
 
 	@RequestMapping(path = "/transfers", method = RequestMethod.GET)
-	List<Transfer> getAllTransfersById(@RequestBody Principal principal) {
+	List<Transfer> getAllTransfersById(Principal principal) {
 
 		int id = userDao.findIdByUsername(principal.getName());
 
