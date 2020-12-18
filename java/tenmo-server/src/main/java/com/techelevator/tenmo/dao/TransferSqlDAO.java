@@ -1,5 +1,8 @@
 package com.techelevator.tenmo.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sql.DataSource;
 
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -7,6 +10,7 @@ import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Component;
 
 import com.techelevator.tenmo.model.Balance;
+import com.techelevator.tenmo.model.Transfer;
 
 @Component
 public class TransferSqlDAO implements TransferDAO {
@@ -16,7 +20,7 @@ public class TransferSqlDAO implements TransferDAO {
 	public TransferSqlDAO(DataSource dataSource) {
 		jdbcTemplate = new JdbcTemplate(dataSource);
 	}
-	
+
 	@Override
 	public double getBalanceDouble(int userId) {
 
@@ -68,6 +72,26 @@ public class TransferSqlDAO implements TransferDAO {
 
 		jdbcTemplate.update(sqlTransfer, fromUser, toUser, amount);
 
+	}
+
+	@Override
+	public List<Transfer> getAllTransfersById(int userId) {
+		List<Transfer> list = new ArrayList<>();
+		String sql = "SELECT * FROM transfers WHERE account_from = ? OR account_to = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, userId, userId);
+
+		while (results.next()) {
+			Transfer transfer = new Transfer();
+			transfer.setTransferId(results.getInt("transfer_id"));
+			transfer.setTransferTypeId(results.getInt("transfer_type_id"));
+			transfer.setTransferStatusId(results.getInt("transfer_status_id"));
+			transfer.setFromUser(results.getInt("account_From"));
+			transfer.setToUser(results.getInt("account_to"));
+			transfer.setAmount(results.getDouble("amount"));
+
+			list.add(transfer);
+		}
+		return list;
 	}
 
 }

@@ -45,7 +45,16 @@ public class TransferController {
 		return findAllUsers;
 
 	}
-	
+
+	@RequestMapping(path = "/transfers", method = RequestMethod.GET)
+	List<Transfer> getAllTransfersById(@RequestBody User user) {
+		
+		Long userId = user.getId();
+		int userIdNew = userId.intValue();
+		
+		List<Transfer> listAllTransfers = transferDao.getAllTransfersById(userIdNew);
+		return listAllTransfers;
+	}
 
 	@RequestMapping(path = "/send", method = RequestMethod.POST)
 	public Transfer sendFunds(@RequestBody Transfer transfer) {
@@ -56,7 +65,7 @@ public class TransferController {
 		double balance = transferDao.getBalanceDouble(userId);
 
 		if (transfer.getAmount() < balance) {
-			
+
 			transferDao.sendFunds(transfer.getFromUser(), transfer.getToUser(), transfer.getAmount());
 		} else {
 			System.out.println("Insufficient Funds");
