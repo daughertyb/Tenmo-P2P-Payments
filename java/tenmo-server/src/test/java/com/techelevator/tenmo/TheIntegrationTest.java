@@ -63,7 +63,7 @@ class TheIntegrationTest {
 	void customer_1_has_balance_of_1000() {
 		
 		double actualResult = dao.getBalance(1).getBalance();
-		assertEquals(1001, actualResult, 0.0);
+		assertEquals(900, actualResult, 0.0);
 	}
 
 }

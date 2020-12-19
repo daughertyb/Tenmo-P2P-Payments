@@ -56,6 +56,14 @@ public class TransferController {
 		return listAllTransfers;
 	}
 
+	@RequestMapping(path = "/transfers-details", method = RequestMethod.GET)
+	List<Transfer> getTransfersDetails(Principal principal) {
+
+		List<Transfer> tranferDetailsList = transferDao.getTransferDetails(((Transfer) principal).getTransferId());
+
+		return tranferDetailsList;
+	}
+
 	@RequestMapping(path = "/send", method = RequestMethod.POST)
 	public void sendFunds(@RequestBody Transfer transfer) throws InsufficientFundsException {
 

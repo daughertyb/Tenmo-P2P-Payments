@@ -8,6 +8,12 @@ public class Transfer {
 	private int transferTypeId;
 	private int transferId;
 	private int transferStatusId;
+	private String transferTypeDesc;
+	private String transferStatusDesc;
+	
+	
+	
+	
 	public int getFromUser() {
 		return fromUser;
 	}
@@ -44,6 +50,15 @@ public class Transfer {
 	public void setTransferStatusId(int transferStatusId) {
 		this.transferStatusId = transferStatusId;
 	}
+	public void setTransferTypeDesc(String string) {
+		this.transferTypeDesc = transferTypeDesc;
+		
+	}
+	public void setTransferStatusDesc(String string) {
+		this.transferStatusDesc = transferStatusDesc;
+		
+	}
+	
 
 	
 

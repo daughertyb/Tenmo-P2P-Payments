@@ -6,9 +6,27 @@ public class Transfer {
 	private int ToUser;
 	private int transferId;
 	private int transferTypeId;
+	private String transferTypeDesc;
 	private int transferStatusId;
+	private String transferStatusDesc;
 	private double amount;
 
+
+	public String getTransferTypeDesc() {
+		return transferTypeDesc;
+	}
+
+	public void setTransferTypeDesc(String transferTypeDesc) {
+		this.transferTypeDesc = transferTypeDesc;
+	}
+
+	public String getTransferStatusDesc() {
+		return transferStatusDesc;
+	}
+
+	public void setTransferStatusDesc(String transferStatusDesc) {
+		this.transferStatusDesc = transferStatusDesc;
+	}
 
 	public int getTransferId() {
 		return transferId;

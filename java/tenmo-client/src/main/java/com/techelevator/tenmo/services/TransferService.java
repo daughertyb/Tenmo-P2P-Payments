@@ -62,32 +62,33 @@ public class TransferService {
 
 	public Transfer[] getAllTransfers() {
 		Transfer[] allTransfers = null;
+		Transfer[] transferDetails = null;
 
 		try {
 			allTransfers = restTemplate
 					.exchange(BASE_URL + "transfers", HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
 			for (Transfer transfers : allTransfers) {
-				System.out.println("-------------------------------------------\r\n" + "From User\r" + "To User\r"
-						+ "ID                  ID                      Amount\r\n"
-						+ "-----------------------------------------------------\r\n");
+				System.out.println("-------------------------------------------------------\r\n" +"TransferID\t" + "FromUserID\t" + "ToUserID\t" + "Amount\r\n"
+						+ "-------------------------------------------------------\r\n");
 				System.out.println(transfers.getTransferId() + "\t\t" + transfers.getFromUser() + "\t\t"
-						+ transfers.getToUser() + "  \t\t$" + transfers.getAmount() + transfers.getTransferStatusId() + transfers.getTransferTypeId());
-			
+						+ transfers.getToUser() + "\t\t$" + transfers.getAmount() + "\n");
+				
 			}
 
 			System.out.println("To view a specific transaction, enter a Transfer Id :");
 			System.out.println();
 			Scanner scanner = new Scanner(System.in);
 			int tranId = scanner.nextInt();
-
-			for (Transfer transfers : allTransfers) {
+			transferDetails = restTemplate
+					.exchange(BASE_URL + "transfers-details", HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
+			for (Transfer transfers : transferDetails) {
 				if (tranId == transfers.getTransferId()) {
-					System.out.println("-------------------------------------------\r\n" + "From User\r" + "To User\r"
-							+ "ID           ID              Amount\r\n"
-							+ "-------------------------------------------\r\n");
-					System.out.println(transfers.getTransferId() + "\t\t" + transfers.getFromUser() + "\t\t"
-							+ transfers.getToUser() + "  \t\t$" + transfers.getAmount());
-					System.out.println(transfers.getTransferStatusId() + transfers.getTransferTypeId());
+					System.out.println("-------------------------------------------------------\r\n\n" + "Transfer Details" + "\n"
+							+ "-------------------------------------------------------\r\n");
+					System.out.println("TransferID: " + transfers.getTransferId() + "\nFromUser: " + transfers.getFromUser() 
+							+ "\nToUser: " + transfers.getToUser() + "\nType: " + transfers.getTransferTypeDesc()
+							+ "\nStatus: " + transfers.getTransferStatusDesc() + "\nAmount: $" + transfers.getAmount());
+					
 				}
 			}
 
