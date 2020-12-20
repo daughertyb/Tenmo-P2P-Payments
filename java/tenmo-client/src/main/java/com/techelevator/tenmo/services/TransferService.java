@@ -79,9 +79,7 @@ public class TransferService {
 			System.out.println();
 			Scanner scanner = new Scanner(System.in);
 			int tranId = scanner.nextInt();
-			transferDetails = restTemplate
-					.exchange(BASE_URL + "transfers-details", HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
-			for (Transfer transfers : transferDetails) {
+			for (Transfer transfers : allTransfers) {
 				if (tranId == transfers.getTransferId()) {
 					System.out.println("-------------------------------------------------------\r\n\n" + "Transfer Details" + "\n"
 							+ "-------------------------------------------------------\r\n");
