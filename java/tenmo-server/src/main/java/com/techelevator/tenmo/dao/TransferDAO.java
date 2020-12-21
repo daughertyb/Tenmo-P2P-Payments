@@ -15,6 +15,4 @@ public interface TransferDAO {
 
 	List<Transfer> getAllTransfersById(int userId);
 
-	List<Transfer> getTransferDetails(int transferId);
-
 }

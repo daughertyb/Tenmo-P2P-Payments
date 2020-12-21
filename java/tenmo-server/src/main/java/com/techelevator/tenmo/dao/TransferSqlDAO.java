@@ -93,31 +93,5 @@ public class TransferSqlDAO implements TransferDAO {
 		}
 		return list;
 	}
-	
-	@Override
-	public List<Transfer> getTransferDetails(int transferId) {
-		List<Transfer> list = new ArrayList<>();
-		String sql = "SELECT transfer_id, account_from, account_to, transfer_types.transfer_type_desc, transfer_statuses.transfer_status_desc" 
-				+"FROM users JOIN accounts ON accounts.user_id = users.user_id"
-				+"JOIN transfers ON accounts.account_id = transfers.account_from OR accounts.account_id = transfers.account_to"
-				+"JOIN transfer_statuses ON transfers.transfer_status_id = transfer_statuses.transfer_status_id"
-				+"JOIN transfer_types ON transfers.transfer_type_id = transfer_types.transfer_type_id "
-				+"WHERE users.user_id = ?";
-		
-		SqlRowSet results = jdbcTemplate.queryForRowSet(sql, transferId);
-
-		while (results.next()) {
-			Transfer transfer = new Transfer();
-			transfer.setTransferId(results.getInt("transfer_id"));
-			transfer.setFromUser(results.getInt("account_From"));
-			transfer.setToUser(results.getInt("account_to"));
-			transfer.setTransferTypeDesc(results.getString("transfer_types.transfer_type_desc"));
-			transfer.setTransferStatusDesc(results.getString("transfer_statuses.transfer_status_desc"));
-			transfer.setAmount(results.getDouble("amount"));
-
-			list.add(transfer);
-		}
-		return list;
-	}
 
 }

@@ -4,7 +4,6 @@ import java.io.Console;
 import java.security.Principal;
 import java.util.List;
 import java.util.Scanner;
-
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -13,7 +12,6 @@ import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 import org.springframework.web.client.RestTemplate;
 import org.w3c.dom.UserDataHandler;
-
 import com.techelevator.tenmo.models.AuthenticatedUser;
 import com.techelevator.tenmo.models.Balance;
 import com.techelevator.tenmo.models.Transfer;
@@ -68,11 +66,12 @@ public class TransferService {
 			allTransfers = restTemplate
 					.exchange(BASE_URL + "transfers", HttpMethod.GET, makeAuthEntity(), Transfer[].class).getBody();
 			for (Transfer transfers : allTransfers) {
-				System.out.println("-------------------------------------------------------\r\n" +"TransferID\t" + "FromUserID\t" + "ToUserID\t" + "Amount\r\n"
+				System.out.println("-------------------------------------------------------\r\n" + "TransferID\t"
+						+ "FromUserID\t" + "ToUserID\t" + "Amount\r\n"
 						+ "-------------------------------------------------------\r\n");
 				System.out.println(transfers.getTransferId() + "\t\t" + transfers.getFromUser() + "\t\t"
 						+ transfers.getToUser() + "\t\t$" + transfers.getAmount() + "\n");
-				
+
 			}
 
 			System.out.println("To view a specific transaction, enter a Transfer Id :");
@@ -81,12 +80,13 @@ public class TransferService {
 			int tranId = scanner.nextInt();
 			for (Transfer transfers : allTransfers) {
 				if (tranId == transfers.getTransferId()) {
-					System.out.println("-------------------------------------------------------\r\n\n" + "Transfer Details" + "\n"
-							+ "-------------------------------------------------------\r\n");
-					System.out.println("TransferID: " + transfers.getTransferId() + "\nFromUser: " + transfers.getFromUser() 
-							+ "\nToUser: " + transfers.getToUser() + "\nType: " + transfers.getTransferTypeDesc()
-							+ "\nStatus: " + transfers.getTransferStatusDesc() + "\nAmount: $" + transfers.getAmount());
-					
+					System.out.println(
+							"-------------------------------------------------------\r\n\n" + "Transfer Details" + "\n"
+									+ "-------------------------------------------------------\r\n");
+					System.out.println("TransferID: " + transfers.getTransferId() + "\nFromUser: "
+							+ transfers.getFromUser() + "\nToUser: " + transfers.getToUser() + "\nType: " + "Send"
+							+ "\nStatus: " + "Approved" + "\nAmount: $" + transfers.getAmount());
+
 				}
 			}
 
@@ -125,6 +125,8 @@ public class TransferService {
 				try {
 					String output = restTemplate.exchange(BASE_URL + "send", HttpMethod.POST,
 							makeAuthEntityWithBody(transfer), String.class).getBody();
+					System.out.println();
+					System.out.println("Transfer Successfully Completed!");
 				} catch (RestClientException e) {
 					System.out.println();
 					System.out.println("Insufficient Funds");
@@ -133,6 +135,8 @@ public class TransferService {
 		} catch (Exception e) {
 			System.out.println("Bad input");
 		}
+
+		// TODO Add request funds method (to be done on holiday break).
 
 	}
 
@@ -147,13 +151,6 @@ public class TransferService {
 		HttpHeaders headers = new HttpHeaders();
 		headers.setBearerAuth(AUTH_TOKEN);
 		HttpEntity entity = new HttpEntity<>(transfer, headers);
-		return entity;
-	}
-
-	private HttpEntity makeAuthEntityWithBodyP(Principal principal) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(AUTH_TOKEN);
-		HttpEntity entity = new HttpEntity<>(principal, headers);
 		return entity;
 	}
 
