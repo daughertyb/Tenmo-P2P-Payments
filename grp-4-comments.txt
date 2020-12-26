@@ -1,0 +1,48 @@
+Great job! Only 1 comment.
+
+1. This logic can be handled differently:
+
+=================================================================================
+			if (transfer.getToUser() != 0) {
+				System.out.print("Enter amount: ");
+				try {
+					transfer.setAmount(Double.parseDouble(scanner.nextLine()));
+				} catch (NumberFormatException e) {
+					System.out.println("Error when entering amount");
+				}
+				try {
+					String output = restTemplate.exchange(BASE_URL + "send", HttpMethod.POST,
+							makeAuthEntityWithBody(transfer), String.class).getBody();
+					System.out.println();
+					System.out.println("Transfer Successfully Completed!");
+				} catch (RestClientException e) {
+					System.out.println();
+					System.out.println("Insufficient Funds");
+				}
+			}
+=================================================================================
+
+Although this works, if the user entered bad data for the dollar amount, your code will still
+try to make the call to the API. Ideally, we want to go to the API only after you have verified 
+that the amount that was entered was not garbage data.  
+
+The most straightforward way is to put the bottom try catch inside the top one:
+
+=================================================================================
+		try {
+			transfer.setAmount(Double.parseDouble(scanner.nextLine()));
+			try {
+				String output = restTemplate.exchange(BASE_URL + "send", HttpMethod.POST,
+				makeAuthEntityWithBody(transfer), String.class).getBody();
+				System.out.println();
+				System.out.println("Transfer Successfully Completed!");
+			} catch (RestClientException e) {
+				System.out.println();
+				System.out.println("Insufficient Funds");
+			}
+		} catch (NumberFormatException e) {
+			System.out.println("Error when entering amount");
+		}
+
+
+=================================================================================
