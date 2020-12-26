@@ -15,4 +15,9 @@ public interface TransferDAO {
 
 	List<Transfer> getAllTransfersById(int userId);
 
+	public void requestFunds(int fromUser, int toUser, double amount);
+
+	List<Transfer> viewPendingRequests(int userId);
+
+	
 }

@@ -73,6 +73,38 @@ public class TransferSqlDAO implements TransferDAO {
 		jdbcTemplate.update(sqlTransfer, fromUser, toUser, amount);
 
 	}
+	
+	@Override
+	public void requestFunds(int fromUser, int toUser, double amount) {
+
+		String sqlRequest = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount)"
+				+ " VALUES (1, 1, ?, ?, ?)";
+
+		jdbcTemplate.update(sqlRequest, toUser, fromUser, amount);
+
+	}
+	
+	@Override
+	public List<Transfer> viewPendingRequests(int userId) {
+		List<Transfer> list = new ArrayList<Transfer>();
+		String sqlPendingRequests = "SELECT * FROM transfers WHERE transfer_status_id = 1 AND account_from = ?";
+		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlPendingRequests, userId);
+		System.out.println(userId + "**************************************************************************************");
+		while (results.next()) {
+			Transfer transfer = new Transfer();
+			transfer.setTransferId(results.getInt("transfer_id"));
+			transfer.setTransferTypeId(results.getInt("transfer_type_id"));
+			transfer.setTransferStatusId(results.getInt("transfer_status_id"));
+			transfer.setFromUser(results.getInt("account_From"));
+			transfer.setToUser(results.getInt("account_to"));
+			transfer.setAmount(results.getDouble("amount"));
+
+			list.add(transfer);
+		}
+		return list;
+	
+		
+	}
 
 	@Override
 	public List<Transfer> getAllTransfersById(int userId) {
