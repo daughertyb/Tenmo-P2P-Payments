@@ -75,9 +75,6 @@ public class TransferController {
 	@RequestMapping(path = "/request", method = RequestMethod.POST)
 	public void requestFunds(@RequestBody Transfer transfer) {
 
-		int userId = transfer.getFromUser();
-		double balance = transferDao.getBalanceDouble(userId);
-
 		transferDao.requestFunds(transfer.getFromUser(), transfer.getToUser(), transfer.getAmount());
 		
 	}
@@ -91,5 +88,7 @@ public class TransferController {
 		
 		return pendingTransfers;
 	}
+	
+	
 
 }

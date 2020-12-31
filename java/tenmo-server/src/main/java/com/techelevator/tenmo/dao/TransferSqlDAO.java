@@ -80,7 +80,7 @@ public class TransferSqlDAO implements TransferDAO {
 		String sqlRequest = "INSERT INTO transfers (transfer_type_id, transfer_status_id, account_from, account_to, amount)"
 				+ " VALUES (1, 1, ?, ?, ?)";
 
-		jdbcTemplate.update(sqlRequest, toUser, fromUser, amount);
+		jdbcTemplate.update(sqlRequest, fromUser, toUser, amount);
 
 	}
 	
@@ -89,7 +89,7 @@ public class TransferSqlDAO implements TransferDAO {
 		List<Transfer> list = new ArrayList<Transfer>();
 		String sqlPendingRequests = "SELECT * FROM transfers WHERE transfer_status_id = 1 AND account_from = ?";
 		SqlRowSet results = jdbcTemplate.queryForRowSet(sqlPendingRequests, userId);
-		System.out.println(userId + "**************************************************************************************");
+		
 		while (results.next()) {
 			Transfer transfer = new Transfer();
 			transfer.setTransferId(results.getInt("transfer_id"));

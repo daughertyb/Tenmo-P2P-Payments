@@ -112,7 +112,7 @@ public class TransferService {
 				}
 			}
 			System.out
-					.print("-------------------------------------------\r\n" + "Enter ID of user you are sending to: ");
+					.print("-------------------------------------------\r\n" + "Enter ID of user you are sending to (0 to cancel): ");
 			transfer.setToUser(Integer.parseInt(scanner.nextLine()));
 			transfer.setFromUser(currentUser.getUser().getId());
 			if (transfer.getToUser() != 0) {
@@ -136,7 +136,48 @@ public class TransferService {
 			System.out.println("Bad input");
 		}
 
-		// TODO Add request funds method (to be done on holiday break).
+
+	}
+	
+	public void requestFunds(AuthenticatedUser currentUser) {
+		User[] users = null;
+		Transfer transfer = new Transfer();
+
+		try {
+			Scanner scanner = new Scanner(System.in);
+			users = restTemplate.exchange(BASE_URL + "users", HttpMethod.GET, makeAuthEntity(), User[].class).getBody();
+			System.out.println("-------------------------------------------\r\n" + "Users\r\n" + "ID\t\tName\r\n"
+					+ "-------------------------------------------");
+			for (User user : users) {
+				if (user.getId() != currentUser.getUser().getId()) {
+					System.out.println(user.getId() + "\t\t" + user.getUsername());
+				}
+			}
+			System.out
+					.print("-------------------------------------------\r\n" + "Enter ID of user you are requesting from (0 to cancel): ");
+			transfer.setFromUser(Integer.parseInt(scanner.nextLine()));
+			System.out.println(transfer.getFromUser());
+			transfer.setToUser(currentUser.getUser().getId());
+			if (transfer.getToUser() != 0) {
+				System.out.print("Enter amount: ");
+				try {
+					transfer.setAmount(Double.parseDouble(scanner.nextLine()));
+				} catch (NumberFormatException e) {
+					System.out.println("Error when entering amount");
+				}
+				try {
+					String output = restTemplate.exchange(BASE_URL + "request", HttpMethod.POST,
+							makeAuthEntityWithBody(transfer), String.class).getBody();
+					System.out.println();
+					System.out.println("Request Successfully Submitted!");
+				} catch (RestClientException e) {
+					System.out.println();
+					System.out.println("Insufficient Funds");
+				}
+			}
+		} catch (Exception e) {
+			System.out.println("Bad input");
+		}
 
 	}
 

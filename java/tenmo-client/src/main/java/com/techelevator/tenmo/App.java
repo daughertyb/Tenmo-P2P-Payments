@@ -92,7 +92,7 @@ public class App {
 	}
 
 	private void requestBucks() {
-		// TODO implement a request funds method.
+		transferService.requestFunds(currentUser);
 
 	}
 
